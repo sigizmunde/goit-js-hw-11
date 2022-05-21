@@ -1,5 +1,6 @@
 import { getSearchResult } from './modules/requests';
 import { markupPage, clearContainer } from './modules/markup';
+import Notiflix from 'notiflix';
 
 const PER_PAGE = 40;
 let pageNum = 1;
@@ -9,6 +10,7 @@ const refs = {};
 window.addEventListener('DOMContentLoaded', onPageLoad);
 
 function onPageLoad() {
+  Notiflix.Notify.info('Starting at last!');
   refs.searchForm = document.querySelector('#search-form');
   refs.galleryContainer = document.querySelector('#gallery');
   refs.loadBtn = document.querySelector('.load-more');
