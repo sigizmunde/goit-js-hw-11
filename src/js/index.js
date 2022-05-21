@@ -1,6 +1,7 @@
 import { getSearchResult } from './modules/requests';
 import { markupPage, clearContainer } from './modules/markup';
-import Notiflix from 'notiflix';
+// import SimpleLightbox from 'simplelightbox/dist/simple-lightbox.esm';
+// import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const PER_PAGE = 40;
 let pageNum = 1;
@@ -10,12 +11,12 @@ const refs = {};
 window.addEventListener('DOMContentLoaded', onPageLoad);
 
 function onPageLoad() {
-  Notiflix.Notify.info('Starting at last!');
   refs.searchForm = document.querySelector('#search-form');
   refs.galleryContainer = document.querySelector('#gallery');
   refs.loadBtn = document.querySelector('.load-more');
   refs.searchForm.addEventListener('submit', onSearchSubmit);
   refs.loadBtn.addEventListener('click', loadMore);
+  // refs.galleryLightbox = new SimpleLightbox('.gallery a');
 }
 
 async function onSearchSubmit(event) {
@@ -66,5 +67,5 @@ function parseData(data) {
       };
     });
   }
-  return { totalPages, currentPage: pageNum, images: imageObjArr };
+  return { totalHits: data.total, totalPages, currentPage: pageNum, images: imageObjArr };
 }
