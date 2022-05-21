@@ -1,13 +1,16 @@
 export function markupPage(container, pageData) {
-  //   let list = container.querySelector('#image-list');
-  //   if (!list) {
-  //     list = document.createElement('ul');
-  //     list.id = 'image-list';
-  //     list.classList.add('image-list');
-  //     container.appendChild(list);
-  //   }
+  if (!pageData.totalPages) {
+    alert('no images found');
+    return;
+  }
   const cards = pageData.images.map(item => markupCard(item));
   container.append(...cards);
+  console.log(pageData.currentPage, pageData.totalPages);
+  if (pageData.currentPage < pageData.totalPages) {
+    showLoadButton();
+  } else {
+    hideLoadButton();
+  }
 }
 
 function markupCard(cardData) {
@@ -16,17 +19,44 @@ function markupCard(cardData) {
   card.innerHTML = `<img src="${cardData.previewURL}" alt="${cardData.tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>❤️${cardData.likes}</b>
+      <b>Likes</b>
+      ${cardData.likes}
     </p>
     <p class="info-item">
-      <b>👀${cardData.views}</b>
+      <b>Views</b>
+      ${cardData.views}
     </p>
     <p class="info-item">
-      <b>🖊️${cardData.comments}</b>
+      <b>Comments</b>
+      ${cardData.comments}
     </p>
     <p class="info-item">
-      <b>⬇️${cardData.downloads}</b>
+      <b>Downloads</b>
+      ${cardData.downloads}
     </p>
   </div>`;
   return card;
+}
+
+export function clearContainer(container) {
+  container.innerHTML = '';
+  hideLoadButton();
+}
+
+export function hideLoadButton() {
+  try {
+    const btn = document.querySelector('.load-more');
+    btn.classList.add('is-hidden');
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function showLoadButton() {
+  try {
+    const btn = document.querySelector('.load-more');
+    btn.classList.remove('is-hidden');
+  } catch (error) {
+    console.log(error);
+  }
 }

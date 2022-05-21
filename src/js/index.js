@@ -1,8 +1,9 @@
 import { getSearchResult } from './modules/requests';
-import { markupPage } from './modules/markup';
+import { markupPage, clearContainer } from './modules/markup';
 
-const PER_PAGE = 20;
+const PER_PAGE = 40;
 let pageNum = 1;
+let searchData = '';
 const refs = {};
 
 window.addEventListener('DOMContentLoaded', onPageLoad);
@@ -10,13 +11,25 @@ window.addEventListener('DOMContentLoaded', onPageLoad);
 function onPageLoad() {
   refs.searchForm = document.querySelector('#search-form');
   refs.galleryContainer = document.querySelector('#gallery');
+  refs.loadBtn = document.querySelector('.load-more');
   refs.searchForm.addEventListener('submit', onSearchSubmit);
+  refs.loadBtn.addEventListener('click', loadMore);
 }
 
 async function onSearchSubmit(event) {
   event.preventDefault();
   pageNum = 1;
-  const searchData = event.currentTarget.elements['searchQuery'].value;
+  clearContainer(refs.galleryContainer);
+  searchData = event.currentTarget.elements['searchQuery'].value;
+  await makeRequestAndDraw();
+}
+
+async function loadMore() {
+  pageNum += 1;
+  await makeRequestAndDraw();
+}
+
+async function makeRequestAndDraw() {
   const data = await getData(searchData);
   console.log(data);
   const pageData = parseData(data);
@@ -51,5 +64,5 @@ function parseData(data) {
       };
     });
   }
-  return { totalPages, images: imageObjArr };
+  return { totalPages, currentPage: pageNum, images: imageObjArr };
 }
