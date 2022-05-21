@@ -1,0 +1,41 @@
+image {
+  display: block;
+}
+
+header {
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  background-color: steelblue;
+}
+
+header > form {
+  margin: 10px auto;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  margin-top: 92px;
+}
+
+.photo-card {
+  width: calc((100% - 126px) / 4);
+  margin-right: 42px;
+}
+
+.photo-card:nth-child(4n + 4) {
+  margin-right: 0;
+}
+
+.photo-card img {
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.photo-card .info {
+  display: flex;
+}
