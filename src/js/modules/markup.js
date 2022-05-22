@@ -7,11 +7,13 @@ export function markupPage(container, pageData) {
     );
     return;
   }
-  const noteString =
-    pageData.totalHits > 1
-      ? `Hooray! We found ${pageData.totalHits} images`
-      : `Hey! We found one image only`;
-  Notiflix.Notify.success(noteString);
+  if (pageData.currentPage === 1) {
+    const noteString =
+      pageData.totalHits > 1
+        ? `Hooray! We found ${pageData.totalHits} images`
+        : `Hey! We found one image only`;
+    Notiflix.Notify.success(noteString);
+  }
   const cards = pageData.images.map(item => markupCard(item));
   container.append(...cards);
   console.log(pageData.currentPage, pageData.totalPages);
@@ -24,6 +26,7 @@ export function markupPage(container, pageData) {
     container.append(warning);
     hideLoadButton();
   }
+  scrollGallery(container, pageData.images.length);
 }
 
 function markupCard(cardData) {
@@ -75,4 +78,34 @@ function showLoadButton() {
   } catch (error) {
     console.log(error);
   }
+}
+
+function scrollGallery(container, imagesCount) {
+  const images = container.querySelectorAll('img');
+  //every image counts itself on loading, then scroll happens
+  let loadedCount = 0;
+  images.forEach(image => {
+    image.addEventListener('load', () => {
+      loadedCount += 1;
+      if (loadedCount === imagesCount) doScroll(container, imagesCount);
+    });
+  });
+}
+
+function doScroll(container, imagesCount) {
+  //getting number of first card in currentPage
+  const n = container.children.length - imagesCount;
+  const { top: firstCardTop } = container.children[n].getBoundingClientRect();
+  const { top: lastCardTop } = container.lastElementChild.getBoundingClientRect();
+
+  const currentPageHeight = lastCardTop - firstCardTop;
+
+  // n === 0 means this element has no content above and already on the top of the page
+  const scrollAmount = n === 0 ? currentPageHeight - window.innerHeight : currentPageHeight;
+  console.log('scrollAmount', scrollAmount, n);
+
+  window.scrollBy({
+    top: scrollAmount,
+    behavior: 'smooth',
+  });
 }
