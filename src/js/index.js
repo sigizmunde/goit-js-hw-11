@@ -1,7 +1,17 @@
 import { getSearchResult } from './modules/requests';
 import { markupPage, clearContainer } from './modules/markup';
-// import SimpleLightbox from 'simplelightbox/dist/simple-lightbox.esm';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+let galleryBox = new SimpleLightbox('.gallery a', {
+  captions: true,
+  captionSelector: 'self',
+  captionType: 'attr',
+  captionAttribute: 'title',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+  showCounter: false,
+});
 
 const PER_PAGE = 40;
 let pageNum = 1;
@@ -37,6 +47,7 @@ async function makeRequestAndDraw() {
   console.log(data);
   const pageData = parseData(data);
   markupPage(refs.galleryContainer, pageData);
+  galleryBox.refresh();
 }
 
 async function getData(searchData) {
