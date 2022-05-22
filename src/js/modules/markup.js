@@ -1,3 +1,4 @@
+import { refs, intersectionObserver } from '..';
 import Notiflix from 'notiflix';
 
 export function markupPage(container, pageData) {
@@ -26,6 +27,7 @@ export function markupPage(container, pageData) {
     container.append(warning);
     hideLoadButton();
   }
+
   scrollGallery(container, pageData.images.length);
 }
 
@@ -87,7 +89,12 @@ function scrollGallery(container, imagesCount) {
   images.forEach(image => {
     image.addEventListener('load', () => {
       loadedCount += 1;
-      if (loadedCount === imagesCount) doScroll(container, imagesCount);
+      if (loadedCount === imagesCount) {
+        if (refs.scrollCheck.checked) {
+          intersectionObserver.observe(refs.loadBtn);
+        }
+        doScroll(container, imagesCount);
+      }
     });
   });
 }
